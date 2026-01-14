@@ -659,7 +659,7 @@
                             </x-nav-link>
                             <!-- ADDED PRODUCTS LINK -->
                             <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="px-3 py-2 text-dark-navy">
-                                <i class="fas fa-code mr-2"></i> {{ __('Products') }}
+                                <i class="fas fa-cubes mr-2"></i> {{ __('Products') }}
                             </x-nav-link>
                             <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-envelope mr-2"></i> {{ __('Contact') }}
@@ -761,7 +761,7 @@
                         </x-responsive-nav-link>
                         <!-- ADDED PRODUCTS LINK FOR MOBILE -->
                         <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="block py-3 px-4 rounded-lg text-dark-navy">
-                            <i class="fas fa-code mr-3"></i> {{ __('Products') }}
+                            <i class="fas fa-cubes mr-3"></i> {{ __('Products') }}
                         </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-envelope mr-3"></i> {{ __('Contact') }}
