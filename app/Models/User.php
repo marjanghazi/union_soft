@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id', // Add role_id to fillable
     ];
 
     /**
@@ -41,4 +42,61 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the role that belongs to the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Check if user has a specific role.
+     *
+     * @param string $roleName
+     * @return bool
+     */
+    public function hasRole($roleName)
+    {
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
+        
+        return $this->role && $this->role->name === $roleName;
+    }
+
+    /**
+     * Check if user is admin.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is developer.
+     *
+     * @return bool
+     */
+    public function isDeveloper()
+    {
+        return $this->hasRole('developer');
+    }
+
+    /**
+     * Get the user's role name.
+     *
+     * @return string|null
+     */
+    public function getRoleNameAttribute()
+    {
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
+        
+        return $this->role ? $this->role->name : null;
+    }
 }
