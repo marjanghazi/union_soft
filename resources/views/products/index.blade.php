@@ -27,7 +27,10 @@
 
                 <!-- Enhanced Search Bar -->
                 <div class="max-w-2xl mx-auto">
-                    <form action="{{ route('products.search') }}" method="GET" class="mb-8">
+                    <form action="{{ route('products.search') }}" method="GET" id="searchForm" class="mb-8">
+                        <input type="hidden" name="sort" id="sortValue" value="{{ request('sort', 'popular') }}">
+                        <input type="hidden" name="category" id="categoryValue" value="{{ request('category') }}">
+                        
                         <div class="relative group">
                             <div class="absolute -inset-0.5 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
                             <div class="relative">
@@ -50,15 +53,15 @@
                         <!-- Search Filters -->
                         <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
                             <span class="text-gray-400 text-sm font-medium">Quick Filters:</span>
-                            <a href="{{ route('products.index') }}?sort=featured" class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700 hover:text-white transition-all text-sm font-medium flex items-center gap-2">
+                            <a href="{{ route('products.index') }}?sort=featured" class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700 hover:text-white transition-all text-sm font-medium flex items-center gap-2 sort-filter {{ request('sort') == 'featured' ? 'bg-gray-700 text-white' : '' }}" data-sort="featured">
                                 <i class="fas fa-star text-yellow-500"></i>
                                 Featured
                             </a>
-                            <a href="{{ route('products.index') }}?sort=newest" class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700 hover:text-white transition-all text-sm font-medium flex items-center gap-2">
+                            <a href="{{ route('products.index') }}?sort=newest" class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700 hover:text-white transition-all text-sm font-medium flex items-center gap-2 sort-filter {{ request('sort') == 'newest' ? 'bg-gray-700 text-white' : '' }}" data-sort="newest">
                                 <i class="fas fa-clock text-teal-500"></i>
                                 Newest
                             </a>
-                            <a href="{{ route('products.index') }}?sort=popular" class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700 hover:text-white transition-all text-sm font-medium flex items-center gap-2">
+                            <a href="{{ route('products.index') }}?sort=popular" class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700 hover:text-white transition-all text-sm font-medium flex items-center gap-2 sort-filter {{ request('sort') == 'popular' || !request('sort') ? 'bg-gray-700 text-white' : '' }}" data-sort="popular">
                                 <i class="fas fa-fire text-orange-500"></i>
                                 Popular
                             </a>
@@ -69,11 +72,11 @@
                 <!-- Stats -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mt-12">
                     <div class="text-center p-4 bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700">
-                        <div class="text-2xl md:text-3xl font-bold text-white mb-1">500+</div>
+                        <div class="text-2xl md:text-3xl font-bold text-white mb-1">{{ $totalProducts ?? '500+' }}</div>
                         <div class="text-gray-400 text-sm">Source Codes</div>
                     </div>
                     <div class="text-center p-4 bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700">
-                        <div class="text-2xl md:text-3xl font-bold text-white mb-1">50+</div>
+                        <div class="text-2xl md:text-3xl font-bold text-white mb-1">{{ $categories->count() ?? '50+' }}</div>
                         <div class="text-gray-400 text-sm">Categories</div>
                     </div>
                     <div class="text-center p-4 bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700">
@@ -101,15 +104,17 @@
                         <div class="flex items-center gap-2 pb-2">
                             <a
                                 href="{{ route('products.index') }}"
-                                class="flex-shrink-0 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 {{ request()->routeIs('products.index') && !request('category') ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                class="flex-shrink-0 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 {{ !request('category') && request()->routeIs('products.index') ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }} category-filter"
+                                data-category="">
                                 <i class="fas fa-layer-group"></i>
                                 <span>All</span>
-                                <span class="text-xs opacity-80">{{ $products->total() }}</span>
+                                <span class="text-xs opacity-80">{{ $totalProducts ?? $products->total() }}</span>
                             </a>
                             @foreach($categories as $category)
                             <a
                                 href="{{ route('products.category', $category) }}"
-                                class="flex-shrink-0 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 {{ request()->is('products/category/' . $category) ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                class="flex-shrink-0 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 category-filter {{ request('category') == $category ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                                data-category="{{ $category }}">
                                 {{ $category }}
                             </a>
                             @endforeach
@@ -117,11 +122,12 @@
                     </div>
                 </div>
                 <div class="hidden md:flex items-center gap-4">
-                    <select class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg border-0 focus:ring-2 focus:ring-teal-500 focus:outline-none text-sm">
-                        <option>Sort by: Popular</option>
-                        <option>Sort by: Newest</option>
-                        <option>Sort by: Price: Low to High</option>
-                        <option>Sort by: Price: High to Low</option>
+                    <select id="sortSelect" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg border-0 focus:ring-2 focus:ring-teal-500 focus:outline-none text-sm">
+                        <option value="popular" {{ request('sort') == 'popular' || !request('sort') ? 'selected' : '' }}>Sort by: Popular</option>
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Sort by: Newest</option>
+                        <option value="featured" {{ request('sort') == 'featured' ? 'selected' : '' }}>Sort by: Featured</option>
+                        <option value="price_low_high" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>Sort by: Price: Low to High</option>
+                        <option value="price_high_low" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>Sort by: Price: High to Low</option>
                     </select>
                 </div>
             </div>
@@ -132,21 +138,52 @@
     <main class="min-h-screen bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <!-- Search Results Header -->
-            @if(request()->has('q'))
+            @if(request()->has('q') || request()->has('category') || request()->has('sort'))
             <div class="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
+                        @if(request()->has('q'))
                         <h1 class="text-2xl font-bold text-gray-900">
                             Search Results for "<span class="text-teal-600">{{ request('q') }}</span>"
                         </h1>
+                        @endif
+                        @if(request()->has('category'))
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            Category: <span class="text-teal-600">{{ request('category') }}</span>
+                        </h1>
+                        @endif
                         <p class="text-gray-600 mt-1">{{ $products->total() }} {{ Str::plural('product', $products->total()) }} found</p>
+                        
+                        <!-- Active Filters -->
+                        @if(request()->has('q') || request()->has('sort'))
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            @if(request()->has('q'))
+                            <span class="inline-flex items-center gap-1 bg-teal-100 text-teal-800 text-xs px-3 py-1.5 rounded-full">
+                                Search: {{ request('q') }}
+                                <button type="button" class="text-teal-800 hover:text-teal-900" onclick="clearFilter('q')">
+                                    <i class="fas fa-times text-xs"></i>
+                                </button>
+                            </span>
+                            @endif
+                            @if(request()->has('sort'))
+                            <span class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-3 py-1.5 rounded-full">
+                                Sort: {{ ucfirst(request('sort')) }}
+                                <button type="button" class="text-blue-800 hover:text-blue-900" onclick="clearFilter('sort')">
+                                    <i class="fas fa-times text-xs"></i>
+                                </button>
+                            </span>
+                            @endif
+                        </div>
+                        @endif
                     </div>
                     <div class="flex items-center gap-3">
+                        @if(request()->has('q') || request()->has('category') || request()->has('sort'))
                         <a href="{{ route('products.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2">
                             <i class="fas fa-times"></i>
-                            Clear Search
+                            Clear All Filters
                         </a>
-                        <button class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2">
+                        @endif
+                        <button onclick="toggleAdvancedFilters()" class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2">
                             <i class="fas fa-filter"></i>
                             Filter Results
                         </button>
@@ -154,6 +191,59 @@
                 </div>
             </div>
             @endif
+
+            <!-- Advanced Filters (Hidden by default) -->
+            <div id="advancedFilters" class="hidden mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-900">Advanced Filters</h3>
+                    <button onclick="toggleAdvancedFilters()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Price Range -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                        <div class="flex items-center gap-3">
+                            <input type="number" name="min_price" placeholder="Min" value="{{ request('min_price') }}" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            <span class="text-gray-500">to</span>
+                            <input type="number" name="max_price" placeholder="Max" value="{{ request('max_price') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                    </div>
+                    
+                    <!-- Technology -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Technology</label>
+                        <select name="technology" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            <option value="">All Technologies</option>
+                            @foreach($technologies as $tech)
+                            <option value="{{ $tech }}" {{ request('technology') == $tech ? 'selected' : '' }}>{{ $tech }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <!-- License Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">License Type</label>
+                        <select name="license" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            <option value="">All Licenses</option>
+                            <option value="MIT" {{ request('license') == 'MIT' ? 'selected' : '' }}>MIT License</option>
+                            <option value="GPL" {{ request('license') == 'GPL' ? 'selected' : '' }}>GPL License</option>
+                            <option value="Commercial" {{ request('license') == 'Commercial' ? 'selected' : '' }}>Commercial License</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end gap-3">
+                    <button onclick="applyAdvancedFilters()" class="px-4 py-2 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors">
+                        Apply Filters
+                    </button>
+                    <button onclick="resetAdvancedFilters()" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-colors">
+                        Reset
+                    </button>
+                </div>
+            </div>
 
             <!-- Products Grid -->
             @if($products->isEmpty())
@@ -186,11 +276,12 @@
                         <i class="fas fa-th-large"></i>
                         <span class="text-sm">Grid View</span>
                     </div>
-                    <select class="px-3 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-sm">
-                        <option>Sort by: Popular</option>
-                        <option>Sort by: Newest</option>
-                        <option>Sort by: Price: Low to High</option>
-                        <option>Sort by: Price: High to Low</option>
+                    <select id="mobileSortSelect" class="px-3 py-2 bg-white text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-sm">
+                        <option value="popular" {{ request('sort') == 'popular' || !request('sort') ? 'selected' : '' }}>Sort by: Popular</option>
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Sort by: Newest</option>
+                        <option value="featured" {{ request('sort') == 'featured' ? 'selected' : '' }}>Sort by: Featured</option>
+                        <option value="price_low_high" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>Sort by: Price: Low to High</option>
+                        <option value="price_high_low" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>Sort by: Price: High to Low</option>
                     </select>
                 </div>
             </div>
@@ -232,10 +323,10 @@
                         <!-- Quick Actions -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                             <div class="flex gap-2 w-full">
-                                <button class="flex-1 bg-white text-gray-900 font-medium py-2.5 rounded-lg hover:bg-gray-50 transition-colors text-sm flex items-center justify-center gap-2">
+                                <a href="{{ route('products.show', $product->slug) }}" class="flex-1 bg-white text-gray-900 font-medium py-2.5 rounded-lg hover:bg-gray-50 transition-colors text-sm flex items-center justify-center gap-2">
                                     <i class="fas fa-eye"></i>
-                                    Preview
-                                </button>
+                                    See Details
+                                </a>
                                 <button class="add-to-cart-btn flex-1 bg-teal-600 text-white font-medium py-2.5 rounded-lg hover:bg-teal-700 transition-colors text-sm flex items-center justify-center gap-2" data-product-id="{{ $product->id }}">
                                     <i class="fas fa-shopping-cart"></i>
                                     Add to Cart
@@ -330,11 +421,11 @@
                             <div class="flex items-center gap-4 text-xs text-gray-500">
                                 <div class="flex items-center gap-1.5">
                                     <i class="fas fa-download"></i>
-                                    <span>{{ rand(50, 500) }}+</span>
+                                    <span>{{ $product->download_count ?? rand(50, 500) }}+</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
                                     <i class="fas fa-star text-amber-500"></i>
-                                    <span>4.8</span>
+                                    <span>{{ $product->rating ?? '4.8' }}</span>
                                 </div>
                             </div>
                             <div class="text-xs text-gray-500">
@@ -350,7 +441,7 @@
             @if($products->hasPages())
             <div class="mt-12">
                 <div class="bg-white rounded-xl p-6 border border-gray-200">
-                    {{ $products->links('vendor.pagination.tailwind') }}
+                    {{ $products->appends(request()->query())->links('vendor.pagination.tailwind') }}
                 </div>
             </div>
             @endif
@@ -505,6 +596,51 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize sort select
+            const sortSelect = document.getElementById('sortSelect');
+            const mobileSortSelect = document.getElementById('mobileSortSelect');
+            const sortValue = document.getElementById('sortValue');
+            
+            function updateSort(value) {
+                sortValue.value = value;
+                document.getElementById('searchForm').submit();
+            }
+            
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    updateSort(this.value);
+                });
+            }
+            
+            if (mobileSortSelect) {
+                mobileSortSelect.addEventListener('change', function() {
+                    updateSort(this.value);
+                });
+            }
+            
+            // Initialize category filter
+            const categoryFilters = document.querySelectorAll('.category-filter');
+            const categoryValue = document.getElementById('categoryValue');
+            
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    categoryValue.value = this.dataset.category;
+                    document.getElementById('searchForm').submit();
+                });
+            });
+            
+            // Initialize sort filter buttons
+            const sortFilters = document.querySelectorAll('.sort-filter');
+            
+            sortFilters.forEach(filter => {
+                filter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sortValue.value = this.dataset.sort;
+                    document.getElementById('searchForm').submit();
+                });
+            });
+
             // Add to cart functionality
             document.querySelectorAll('.add-to-cart-btn').forEach(button => {
                 button.addEventListener('click', function(e) {
@@ -520,7 +656,7 @@
                     // Add animation
                     productCard.classList.add('ring-2', 'ring-teal-500');
                     
-                    // Simulate API call
+                    // Simulate API call (replace with actual API call)
                     setTimeout(() => {
                         // Success state
                         this.innerHTML = '<i class="fas fa-check mr-2"></i> Added!';
@@ -529,6 +665,9 @@
                         
                         // Show notification
                         showNotification('Product added to cart successfully!', 'success');
+                        
+                        // Update cart count
+                        updateCartCount();
                         
                         // Reset after 2 seconds
                         setTimeout(() => {
@@ -616,25 +755,101 @@
                     }
                 }, 4000);
             }
-
-            // Initialize animations
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-in-view');
+            
+            function updateCartCount() {
+                // Update cart count in the header (assuming you have a cart icon)
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    const currentCount = parseInt(cartCount.textContent) || 0;
+                    cartCount.textContent = currentCount + 1;
+                    cartCount.classList.remove('hidden');
+                }
+            }
+            
+            function clearFilter(filterName) {
+                const url = new URL(window.location.href);
+                url.searchParams.delete(filterName);
+                window.location.href = url.toString();
+            }
+            
+            window.clearFilter = clearFilter;
+            
+            function toggleAdvancedFilters() {
+                const filters = document.getElementById('advancedFilters');
+                filters.classList.toggle('hidden');
+            }
+            
+            window.toggleAdvancedFilters = toggleAdvancedFilters;
+            
+            function applyAdvancedFilters() {
+                const form = document.createElement('form');
+                form.method = 'GET';
+                form.action = window.location.pathname;
+                
+                // Add existing parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.forEach((value, key) => {
+                    if (key !== 'min_price' && key !== 'max_price' && key !== 'technology' && key !== 'license') {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
                     }
                 });
-            }, observerOptions);
-
-            // Observe product cards
-            document.querySelectorAll('.group.bg-white').forEach(card => {
-                observer.observe(card);
-            });
+                
+                // Add advanced filter values
+                const minPrice = document.querySelector('input[name="min_price"]').value;
+                const maxPrice = document.querySelector('input[name="max_price"]').value;
+                const technology = document.querySelector('select[name="technology"]').value;
+                const license = document.querySelector('select[name="license"]').value;
+                
+                if (minPrice) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'min_price';
+                    input.value = minPrice;
+                    form.appendChild(input);
+                }
+                
+                if (maxPrice) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'max_price';
+                    input.value = maxPrice;
+                    form.appendChild(input);
+                }
+                
+                if (technology) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'technology';
+                    input.value = technology;
+                    form.appendChild(input);
+                }
+                
+                if (license) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'license';
+                    input.value = license;
+                    form.appendChild(input);
+                }
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+            
+            window.applyAdvancedFilters = applyAdvancedFilters;
+            
+            function resetAdvancedFilters() {
+                document.querySelector('input[name="min_price"]').value = '';
+                document.querySelector('input[name="max_price"]').value = '';
+                document.querySelector('select[name="technology"]').value = '';
+                document.querySelector('select[name="license"]').value = '';
+            }
+            
+            window.resetAdvancedFilters = resetAdvancedFilters;
         });
     </script>
     @endpush

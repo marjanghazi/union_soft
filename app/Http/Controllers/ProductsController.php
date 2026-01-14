@@ -8,20 +8,107 @@ use Illuminate\Http\Request;
 class ProductsController extends Controller
 {
     /**
-     * Display products listing
+     * Display products listing with filters
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::where('is_active', true)
-            ->orderBy('is_featured', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
-
+        $query = Product::where('is_active', true);
+        
+        // Search functionality
+        if ($request->has('q') && $request->q) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->q . '%')
+                  ->orWhere('short_description', 'like', '%' . $request->q . '%')
+                  ->orWhere('description', 'like', '%' . $request->q . '%')
+                  ->orWhere('technology', 'like', '%' . $request->q . '%');
+            });
+        }
+        
+        // Category filter
+        if ($request->has('category') && $request->category) {
+            $query->where('category', $request->category);
+        }
+        
+        // Technology filter
+        if ($request->has('technology') && $request->technology) {
+            $query->where('technology', $request->technology);
+        }
+        
+        // Price range filter
+        if ($request->has('min_price') && $request->min_price) {
+            $query->where(function($q) use ($request) {
+                $q->where('sale_price', '>=', $request->min_price)
+                  ->orWhere('price', '>=', $request->min_price);
+            });
+        }
+        
+        if ($request->has('max_price') && $request->max_price) {
+            $query->where(function($q) use ($request) {
+                $q->where('sale_price', '<=', $request->max_price)
+                  ->orWhere('price', '<=', $request->max_price);
+            });
+        }
+        
+        // License filter
+        if ($request->has('license') && $request->license) {
+            $query->where('license', $request->license);
+        }
+        
+        // Featured filter
+        if ($request->has('featured') && $request->featured) {
+            $query->where('is_featured', true);
+        }
+        
+        // Sorting
+        switch ($request->get('sort', 'popular')) {
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'featured':
+                $query->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc');
+                break;
+            case 'price_low_high':
+                $query->orderByRaw('COALESCE(sale_price, price) ASC');
+                break;
+            case 'price_high_low':
+                $query->orderByRaw('COALESCE(sale_price, price) DESC');
+                break;
+            case 'popular':
+            default:
+                $query->orderBy('download_count', 'desc')->orderBy('created_at', 'desc');
+                break;
+        }
+        
+        // Get all unique categories for filter
         $categories = Product::where('is_active', true)
             ->distinct('category')
-            ->pluck('category');
-
-        return view('products.index', compact('products', 'categories'));
+            ->pluck('category')
+            ->filter()
+            ->values();
+        
+        // Get all unique technologies for filter
+        $technologies = Product::where('is_active', true)
+            ->distinct('technology')
+            ->pluck('technology')
+            ->filter()
+            ->values();
+        
+        // Get license types
+        $licenses = ['MIT', 'GPL', 'Commercial'];
+        
+        // Get total product count
+        $totalProducts = Product::where('is_active', true)->count();
+        
+        // Paginate results (preserve all query parameters)
+        $products = $query->paginate(12)->withQueryString();
+        
+        return view('products.index', compact(
+            'products', 
+            'categories', 
+            'technologies',
+            'licenses',
+            'totalProducts'
+        ));
     }
 
     /**
@@ -36,6 +123,7 @@ class ProductsController extends Controller
         $relatedProducts = Product::where('category', $product->category)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
+            ->inRandomOrder()
             ->limit(4)
             ->get();
 
@@ -45,17 +133,11 @@ class ProductsController extends Controller
     /**
      * Filter products by category
      */
-    public function category($category)
+    public function category($category, Request $request)
     {
-        $products = Product::where('category', $category)
-            ->where('is_active', true)
-            ->paginate(12);
-
-        $categories = Product::where('is_active', true)
-            ->distinct('category')
-            ->pluck('category');
-
-        return view('products.index', compact('products', 'categories'));
+        // Use the main index method with category parameter
+        $request->merge(['category' => $category]);
+        return $this->index($request);
     }
 
     /**
@@ -63,21 +145,18 @@ class ProductsController extends Controller
      */
     public function search(Request $request)
     {
-        $query = $request->input('q');
-        
-        $products = Product::where('is_active', true)
-            ->where(function($q) use ($query) {
-                $q->where('name', 'LIKE', "%{$query}%")
-                  ->orWhere('description', 'LIKE', "%{$query}%")
-                  ->orWhere('short_description', 'LIKE', "%{$query}%")
-                  ->orWhere('technology', 'LIKE', "%{$query}%");
-            })
-            ->paginate(12);
-
-        $categories = Product::where('is_active', true)
-            ->distinct('category')
-            ->pluck('category');
-
-        return view('products.index', compact('products', 'categories', 'query'));
+        // Use the main index method with search parameter
+        return $this->index($request);
+    }
+    
+    /**
+     * Get product discount percentage
+     */
+    private function calculateDiscountPercentage($price, $salePrice)
+    {
+        if ($salePrice && $price > 0) {
+            return round((($price - $salePrice) / $price) * 100);
+        }
+        return 0;
     }
 }
