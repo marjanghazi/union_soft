@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\DeveloperController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,11 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 // Contact page
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.store');
+// Products Routes
+Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+Route::get('/products/category/{category}', [ProductsController::class, 'category'])->name('products.category');
+Route::get('/products/search', [ProductsController::class, 'search'])->name('products.search');
+Route::get('/products/{slug}', [ProductsController::class, 'show'])->name('products.show');
 
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -57,5 +63,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // add more developer routes here
     });
 });
+
 
 require __DIR__.'/auth.php';

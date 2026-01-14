@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Union Soft') }} - From Vision to Victory</title>
-    <meta name="description" content="Union Soft offers expert web development, eCommerce, digital marketing & online skills training for global clients and local learners.">
+    <meta name="description" content="Union Soft offers expert web development, eCommerce, digital marketing, source codes & online skills training for global clients and local learners.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -112,6 +112,26 @@
         .service-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(62, 209, 162, 0.15);
+        }
+
+        /* PRODUCT CARD STYLES */
+        .product-card {
+            @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-lg relative;
+        }
+
+        .product-image-container {
+            @apply relative overflow-hidden;
+        }
+
+        .product-overlay {
+            @apply absolute inset-0 bg-dark-navy/80 flex flex-col items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 p-6;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .hero-section {
@@ -476,6 +496,17 @@
             color: #9ca3af !important;
         }
 
+        /* Fix for product cards in dark mode */
+        [data-theme="dark"] .product-card {
+            background-color: #1f2937 !important;
+            border-color: #374151 !important;
+        }
+
+        [data-theme="dark"] .product-card .text-gray-600,
+        [data-theme="dark"] .product-card .text-gray-500 {
+            color: #9ca3af !important;
+        }
+
         /* Fix for the main content area */
         [data-theme="dark"] main {
             background-color: #111827 !important;
@@ -565,6 +596,35 @@
         [data-theme="dark"] .mobile-nav-content .responsive-nav-link {
             color: var(--text-dark) !important;
         }
+
+        /* Pagination Styles */
+        .pagination {
+            @apply flex items-center justify-center space-x-2;
+        }
+
+        .pagination .page-item {
+            @apply inline-flex items-center justify-center;
+        }
+
+        .pagination .page-link {
+            @apply px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition;
+        }
+
+        .pagination .page-item.active .page-link {
+            @apply bg-primary-mint text-white border-primary-mint;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            @apply text-gray-400 cursor-not-allowed hover:bg-transparent;
+        }
+
+        [data-theme="dark"] .pagination .page-link {
+            @apply border-gray-600 text-gray-300 hover:bg-gray-800;
+        }
+
+        [data-theme="dark"] .pagination .page-item.active .page-link {
+            @apply bg-primary-mint text-dark-navy border-primary-mint;
+        }
     </style>
 </head>
 
@@ -596,6 +656,10 @@
                             </x-nav-link>
                             <x-nav-link :href="route('services')" :active="request()->routeIs('services')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-cogs mr-2"></i> {{ __('Services') }}
+                            </x-nav-link>
+                            <!-- ADDED PRODUCTS LINK -->
+                            <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="px-3 py-2 text-dark-navy">
+                                <i class="fas fa-code mr-2"></i> {{ __('Source Codes') }}
                             </x-nav-link>
                             <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-envelope mr-2"></i> {{ __('Contact') }}
@@ -695,6 +759,10 @@
                         <x-responsive-nav-link :href="route('services')" :active="request()->routeIs('services')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-cogs mr-3"></i> {{ __('Services') }}
                         </x-responsive-nav-link>
+                        <!-- ADDED PRODUCTS LINK FOR MOBILE -->
+                        <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="block py-3 px-4 rounded-lg text-dark-navy">
+                            <i class="fas fa-code mr-3"></i> {{ __('Source Codes') }}
+                        </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-envelope mr-3"></i> {{ __('Contact') }}
                         </x-responsive-nav-link>
@@ -752,7 +820,7 @@
                     <div>
                         <h3 class="text-2xl font-bold mb-4 text-white"><span class="text-primary-mint">Union</span>Soft</h3>
                         <p class="text-gray-300">From Vision to Victory</p>
-                        <p class="mt-4 text-gray-300">Empowering Digital Excellence through innovative software solutions and comprehensive training programs.</p>
+                        <p class="mt-4 text-gray-300">Empowering Digital Excellence through innovative software solutions, source codes, and comprehensive training programs.</p>
                     </div>
 
                     <div>
@@ -761,6 +829,7 @@
                             <li><a href="{{ route('home') }}" class="hover:text-primary-mint">Home</a></li>
                             <li><a href="{{ route('about') }}" class="hover:text-primary-mint">About Us</a></li>
                             <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Services</a></li>
+                            <li><a href="{{ route('products.index') }}" class="hover:text-primary-mint">Source Codes</a></li>
                             <li><a href="{{ route('contact') }}" class="hover:text-primary-mint">Contact</a></li>
                         </ul>
                     </div>
@@ -768,10 +837,11 @@
                     <div>
                         <h4 class="text-lg font-semibold mb-4 text-white">Services</h4>
                         <ul class="space-y-2">
-                            <li><a href="#" class="hover:text-primary-mint">Web Development</a></li>
-                            <li><a href="#" class="hover:text-primary-mint">E-commerce Solutions</a></li>
-                            <li><a href="#" class="hover:text-primary-mint">Digital Marketing</a></li>
-                            <li><a href="#" class="hover:text-primary-mint">Training & Skills</a></li>
+                            <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Web Development</a></li>
+                            <li><a href="{{ route('services') }}" class="hover:text-primary-mint">E-commerce Solutions</a></li>
+                            <li><a href="{{ route('products.index') }}" class="hover:text-primary-mint">Source Codes</a></li>
+                            <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Digital Marketing</a></li>
+                            <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Training & Skills</a></li>
                         </ul>
                     </div>
 
