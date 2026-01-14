@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +18,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <!-- Custom Styles -->
     <style>
         :root {
@@ -201,7 +202,7 @@
         .bg-dark-navy {
             background-color: var(--dark-navy) !important;
         }
-        
+
         /* Fix for navigation link active state */
         .nav-link.active,
         .responsive-nav-link.active {
@@ -209,13 +210,13 @@
             color: var(--dark-navy) !important;
             border-radius: 4px;
         }
-        
+
         /* Fix for navigation link hover */
         .nav-link:hover:not(.active),
         .responsive-nav-link:hover:not(.active) {
             color: var(--primary-mint) !important;
         }
-        
+
         /* Fix for button styling in nav */
         .btn-primary.nav-link {
             padding: 8px 16px;
@@ -223,6 +224,7 @@
         }
     </style>
 </head>
+
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-50">
         <!-- Navigation -->
@@ -232,9 +234,12 @@
                     <div class="flex">
                         <!-- Logo -->
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="{{ route('home') }}" class="navbar-brand">
-                                <span>Union</span>Soft
-                                <small class="ml-2 text-sm text-gray-500 font-normal">From Vision to Victory</small>
+                            <a href="{{ route('home') }}" class="navbar-brand flex items-center">
+                                <!-- Option 1: Image logo -->
+                                <img src="{{ asset('images/logo.png') }}"
+                                    alt="{{ config('app.name', 'Union Soft') }}"
+                                    class="h-20 w-auto mr-2">
+
                             </a>
                         </div>
 
@@ -259,48 +264,48 @@
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                         <!-- Authentication Links -->
                         @auth
-                            <div class="ml-3 relative" x-data="{ open: false }">
-                                <x-dropdown align="right" width="48">
-                                    <x-slot name="trigger">
-                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                            <div>{{ Auth::user()->name }}</div>
-                                            <div class="ml-1">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </div>
-                                        </button>
-                                    </x-slot>
+                        <div class="ml-3 relative" x-data="{ open: false }">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                        <div>{{ Auth::user()->name }}</div>
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
 
-                                    <x-slot name="content">
-                                        <x-dropdown-link :href="route('profile.edit')">
-                                            {{ __('Profile') }}
-                                        </x-dropdown-link>
+                                <x-slot name="content">
+                                    <x-dropdown-link :href="route('profile.edit')">
+                                        {{ __('Profile') }}
+                                    </x-dropdown-link>
 
-                                        <!-- Authentication -->
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <x-dropdown-link :href="route('logout')"
-                                                    onclick="event.preventDefault();
+                                    <!-- Authentication -->
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <x-dropdown-link :href="route('logout')"
+                                            onclick="event.preventDefault();
                                                                 this.closest('form').submit();">
-                                                {{ __('Log Out') }}
-                                            </x-dropdown-link>
-                                        </form>
-                                    </x-slot>
-                                </x-dropdown>
-                            </div>
+                                            {{ __('Log Out') }}
+                                        </x-dropdown-link>
+                                    </form>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
                         @else
-                            <div class="space-x-4">
-                                <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                                    <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
-                                </x-nav-link>
-                                
-                                @if (Route::has('register'))
-                                    <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="btn-primary">
-                                        <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
-                                    </x-nav-link>
-                                @endif
-                            </div>
+                        <div class="space-x-4">
+                            <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                                <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
+                            </x-nav-link>
+
+                            @if (Route::has('register'))
+                            <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="btn-primary">
+                                <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
+                            </x-nav-link>
+                            @endif
+                        </div>
                         @endauth
                     </div>
 
@@ -336,38 +341,38 @@
                 <!-- Responsive Settings Options -->
                 <div class="pt-4 pb-1 border-t border-gray-200">
                     @auth
-                        <div class="px-4">
-                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                        </div>
+                    <div class="px-4">
+                        <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    </div>
 
-                        <div class="mt-3 space-y-1">
-                            <x-responsive-nav-link :href="route('profile.edit')" @click="open = false">
-                                {{ __('Profile') }}
-                            </x-responsive-nav-link>
+                    <div class="mt-3 space-y-1">
+                        <x-responsive-nav-link :href="route('profile.edit')" @click="open = false">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
 
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-responsive-nav-link :href="route('logout')"
-                                        onclick="event.preventDefault();
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <x-responsive-nav-link :href="route('logout')"
+                                onclick="event.preventDefault();
                                                     this.closest('form').submit();" @click="open = false">
-                                    {{ __('Log Out') }}
-                                </x-responsive-nav-link>
-                            </form>
-                        </div>
-                    @else
-                        <div class="space-y-1">
-                            <x-responsive-nav-link :href="route('login')" @click="open = false">
-                                <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
+                                {{ __('Log Out') }}
                             </x-responsive-nav-link>
-                            
-                            @if (Route::has('register'))
-                                <x-responsive-nav-link :href="route('register')" @click="open = false">
-                                    <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
-                                </x-responsive-nav-link>
-                            @endif
-                        </div>
+                        </form>
+                    </div>
+                    @else
+                    <div class="space-y-1">
+                        <x-responsive-nav-link :href="route('login')" @click="open = false">
+                            <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
+                        </x-responsive-nav-link>
+
+                        @if (Route::has('register'))
+                        <x-responsive-nav-link :href="route('register')" @click="open = false">
+                            <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
+                        </x-responsive-nav-link>
+                        @endif
+                    </div>
                     @endauth
                 </div>
             </div>
@@ -453,14 +458,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Make sure all navigation links work with single click
             const navLinks = document.querySelectorAll('a.nav-link, a.responsive-nav-link');
-            
+
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     // Only prevent default behavior for links that have JavaScript handlers
                     if (this.getAttribute('href') === '#' || this.hasAttribute('@click')) {
                         e.preventDefault();
                     }
-                    
+
                     // Close mobile menu when a link is clicked
                     const mobileMenu = document.querySelector('[x-data]');
                     if (mobileMenu && mobileMenu.__x && mobileMenu.__x.$data && mobileMenu.__x.$data.open) {
@@ -497,12 +502,14 @@
                         observer.unobserve(counter);
                     }
                 });
-            }, { threshold: 0.5 });
+            }, {
+                threshold: 0.5
+            });
 
             counters.forEach(counter => {
                 observer.observe(counter);
             });
-            
+
             // Fix for active state styling
             const currentPath = window.location.pathname;
             navLinks.forEach(link => {
@@ -511,7 +518,7 @@
                 }
             });
         });
-        
+
         // Prevent double click issues
         document.addEventListener('dblclick', function(e) {
             if (e.target.tagName === 'A' && e.target.closest('nav')) {
@@ -519,8 +526,9 @@
             }
         });
     </script>
-    
+
     <!-- Add Alpine.js if not already included -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
+
 </html>
