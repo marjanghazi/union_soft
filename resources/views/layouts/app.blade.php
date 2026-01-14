@@ -206,25 +206,26 @@
             background-color: var(--dark-navy) !important;
         }
 
-        /* Fix for navigation link active state - FOR LIGHT MODE */
-        .nav-link.active,
-        .responsive-nav-link.active {
+        /* FIX FOR NAVIGATION LINKS - LIGHT MODE */
+        /* This ensures nav links are visible in light mode */
+        nav .nav-link,
+        nav .responsive-nav-link {
+            color: var(--dark-navy) !important;
+        }
+
+        /* Hover states for light mode */
+        nav .nav-link:hover:not(.active),
+        nav .responsive-nav-link:hover:not(.active) {
+            color: var(--primary-mint) !important;
+        }
+
+        /* Active state for light mode */
+        nav .nav-link.active,
+        nav .responsive-nav-link.active {
             background-color: var(--primary-mint) !important;
             color: var(--dark-navy) !important;
             border-radius: 6px;
             font-weight: 600;
-        }
-
-        /* Navigation links in LIGHT MODE */
-        .nav-link,
-        .responsive-nav-link {
-            color: var(--dark-navy) !important;
-            /* Dark navy color for visibility */
-        }
-
-        .nav-link:hover:not(.active),
-        .responsive-nav-link:hover:not(.active) {
-            color: var(--primary-mint) !important;
         }
 
         /* Fix for button styling in nav */
@@ -238,28 +239,26 @@
             color-scheme: dark;
         }
 
-        [data-theme="dark"] .nav-link,
-        [data-theme="dark"] .responsive-nav-link {
+        /* Dark mode navigation links */
+        [data-theme="dark"] nav .nav-link,
+        [data-theme="dark"] nav .responsive-nav-link {
             color: var(--text-dark) !important;
-            /* Light text for dark mode */
         }
 
-        [data-theme="dark"] .nav-link.active,
-        [data-theme="dark"] .responsive-nav-link.active {
+        [data-theme="dark"] nav .nav-link.active,
+        [data-theme="dark"] nav .responsive-nav-link.active {
             background-color: var(--primary-mint) !important;
             color: var(--dark-navy) !important;
-            /* Dark text on mint background */
         }
 
-        [data-theme="dark"] .nav-link:hover:not(.active),
-        [data-theme="dark"] .responsive-nav-link:hover:not(.active) {
+        [data-theme="dark"] nav .nav-link:hover:not(.active),
+        [data-theme="dark"] nav .responsive-nav-link:hover:not(.active) {
             color: var(--primary-mint) !important;
         }
 
         [data-theme="dark"] .navbar-brand span.text-dark-navy,
         [data-theme="dark"] .navbar-brand .text-dark-navy {
             color: var(--text-dark) !important;
-            /* Light text in dark mode */
         }
 
         /* Logo sizing */
@@ -348,7 +347,6 @@
 
         [data-theme="dark"] .mobile-nav-content {
             background: #1f2937 !important;
-            /* Dark background for mobile menu */
         }
 
         .mobile-nav-content.open {
@@ -471,6 +469,21 @@
             color: white !important;
             background-color: #4b5563 !important;
         }
+
+        /* Special fix for navigation text colors */
+        .nav-link.text-dark-navy,
+        .responsive-nav-link.text-dark-navy {
+            color: var(--dark-navy) !important;
+        }
+
+        /* Ensure mobile menu items are visible in light mode */
+        .mobile-nav-content .responsive-nav-link {
+            color: var(--dark-navy) !important;
+        }
+
+        [data-theme="dark"] .mobile-nav-content .responsive-nav-link {
+            color: var(--text-dark) !important;
+        }
     </style>
 </head>
 
@@ -493,16 +506,17 @@
                     <!-- Desktop Navigation -->
                     <div class="desktop-nav hidden md:flex items-center space-x-6">
                         <div class="flex items-center space-x-1">
-                            <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="px-3 py-2">
+                            <!-- EXPLICIT TEXT COLOR CLASSES ADDED -->
+                            <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-home mr-2"></i> {{ __('Home') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('about')" :active="request()->routeIs('about')" class="px-3 py-2">
+                            <x-nav-link :href="route('about')" :active="request()->routeIs('about')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-info-circle mr-2"></i> {{ __('About') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('services')" :active="request()->routeIs('services')" class="px-3 py-2">
+                            <x-nav-link :href="route('services')" :active="request()->routeIs('services')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-cogs mr-2"></i> {{ __('Services') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="px-3 py-2">
+                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-envelope mr-2"></i> {{ __('Contact') }}
                             </x-nav-link>
                         </div>
@@ -547,6 +561,7 @@
                             </div>
                             @else
                             <div class="flex items-center space-x-3">
+                                <!-- EXPLICIT TEXT COLOR CLASSES ADDED -->
                                 <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="text-dark-navy hover:text-primary-mint">
                                     <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
                                 </x-nav-link>
@@ -583,22 +598,23 @@
                 <div class="p-4">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-dark-navy">Menu</h3>
-                        <button id="close-mobile-menu" class="p-2 rounded-md hover:bg-gray-100">
-                            <i class="fas fa-times text-dark-navy"></i>
+                        <button id="close-mobile-menu" class="p-2 rounded-md hover:bg-gray-100 text-dark-navy">
+                            <i class="fas fa-times"></i>
                         </button>
                     </div>
 
                     <div class="space-y-2 mb-6">
-                        <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="block py-3 px-4 rounded-lg">
+                        <!-- EXPLICIT TEXT COLOR CLASSES ADDED -->
+                        <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-home mr-3"></i> {{ __('Home') }}
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')" class="block py-3 px-4 rounded-lg">
+                        <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-info-circle mr-3"></i> {{ __('About') }}
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('services')" :active="request()->routeIs('services')" class="block py-3 px-4 rounded-lg">
+                        <x-responsive-nav-link :href="route('services')" :active="request()->routeIs('services')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-cogs mr-3"></i> {{ __('Services') }}
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="block py-3 px-4 rounded-lg">
+                        <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-envelope mr-3"></i> {{ __('Contact') }}
                         </x-responsive-nav-link>
                     </div>
@@ -611,7 +627,7 @@
                         </div>
 
                         <div class="space-y-2">
-                            <x-responsive-nav-link :href="route('profile.edit')" class="block py-3 px-4 rounded-lg">
+                            <x-responsive-nav-link :href="route('profile.edit')" class="block py-3 px-4 rounded-lg text-dark-navy">
                                 <i class="fas fa-user mr-3"></i> {{ __('Profile') }}
                             </x-responsive-nav-link>
 
@@ -620,19 +636,19 @@
                                 <x-responsive-nav-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                     this.closest('form').submit();"
-                                    class="block py-3 px-4 rounded-lg">
+                                    class="block py-3 px-4 rounded-lg text-dark-navy">
                                     <i class="fas fa-sign-out-alt mr-3"></i> {{ __('Log Out') }}
                                 </x-responsive-nav-link>
                             </form>
                         </div>
                         @else
                         <div class="space-y-2">
-                            <x-responsive-nav-link :href="route('login')" class="block py-3 px-4 rounded-lg">
+                            <x-responsive-nav-link :href="route('login')" class="block py-3 px-4 rounded-lg text-dark-navy">
                                 <i class="fas fa-sign-in-alt mr-3"></i> {{ __('Login') }}
                             </x-responsive-nav-link>
 
                             @if (Route::has('register'))
-                            <x-responsive-nav-link :href="route('register')" class="block py-3 px-4 rounded-lg btn-primary">
+                            <x-responsive-nav-link :href="route('register')" class="block py-3 px-4 rounded-lg btn-primary text-dark-navy">
                                 <i class="fas fa-user-plus mr-3"></i> {{ __('Register') }}
                             </x-responsive-nav-link>
                             @endif
