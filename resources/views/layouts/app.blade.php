@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -390,25 +389,121 @@
             }
         }
 
-        /* CRITICAL FIX: Override Breeze's default blue text colors in dark mode */
-        [data-theme="dark"] .text-gray-700,
-        [data-theme="dark"] .text-gray-800,
-        [data-theme="dark"] .text-gray-900,
-        [data-theme="dark"] .text-gray-600,
-        [data-theme="dark"] .text-gray-500 {
-            color: var(--text-dark) !important;
-        }
-
+        /* ============ CRITICAL DARK MODE FIXES ============ */
+        
+        /* Fix ALL blue-ish text colors in dark mode */
         [data-theme="dark"] .text-blue-600,
         [data-theme="dark"] .text-indigo-600,
         [data-theme="dark"] .text-blue-700,
         [data-theme="dark"] .text-indigo-700,
         [data-theme="dark"] .text-blue-800,
-        [data-theme="dark"] .text-indigo-800 {
+        [data-theme="dark"] .text-indigo-800,
+        [data-theme="dark"] .text-blue-500,
+        [data-theme="dark"] .text-indigo-500,
+        [data-theme="dark"] .text-blue-400,
+        [data-theme="dark"] .text-indigo-400,
+        [data-theme="dark"] .text-blue-300,
+        [data-theme="dark"] .text-indigo-300 {
             color: var(--text-dark) !important;
         }
 
-        /* Fix backgrounds */
+        /* Fix ALL gray text colors in dark mode */
+        [data-theme="dark"] .text-gray-700,
+        [data-theme="dark"] .text-gray-800,
+        [data-theme="dark"] .text-gray-900,
+        [data-theme="dark"] .text-gray-600,
+        [data-theme="dark"] .text-gray-500,
+        [data-theme="dark"] .text-gray-400 {
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix headings in dark mode - VERY IMPORTANT */
+        [data-theme="dark"] h1,
+        [data-theme="dark"] h2,
+        [data-theme="dark"] h3,
+        [data-theme="dark"] h4,
+        [data-theme="dark"] h5,
+        [data-theme="dark"] h6 {
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix text-dark-navy class in dark mode */
+        [data-theme="dark"] .text-dark-navy {
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix text-gray-600 specifically for better visibility in cards */
+        [data-theme="dark"] .text-gray-600 {
+            color: #9ca3af !important;
+        }
+
+        /* Fix for hero section in dark mode */
+        [data-theme="dark"] .hero-section {
+            background: linear-gradient(135deg, #0D3141 0%, #1a4a5e 100%) !important;
+        }
+
+        [data-theme="dark"] .hero-section h1,
+        [data-theme="dark"] .hero-section p,
+        [data-theme="dark"] .hero-section .text-white,
+        [data-theme="dark"] .hero-section .text-gray-300 {
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix for buttons in hero section dark mode */
+        [data-theme="dark"] .hero-section .btn-outline-primary.text-white {
+            color: var(--text-dark) !important;
+            border-color: var(--text-dark) !important;
+        }
+
+        [data-theme="dark"] .hero-section .btn-outline-primary.text-white:hover {
+            background-color: var(--text-dark) !important;
+            color: var(--dark-navy) !important;
+        }
+
+        /* Fix for cards and sections in dark mode */
+        [data-theme="dark"] .stat-card,
+        [data-theme="dark"] .service-card,
+        [data-theme="dark"] .testimonial-card,
+        [data-theme="dark"] .stats-section {
+            background-color: #1f2937 !important;
+            color: var(--text-dark) !important;
+        }
+
+        [data-theme="dark"] .stat-card .text-gray-600,
+        [data-theme="dark"] .service-card .text-gray-600,
+        [data-theme="dark"] .testimonial-card .text-gray-600,
+        [data-theme="dark"] .stats-section .text-gray-600 {
+            color: #9ca3af !important;
+        }
+
+        /* Fix for the main content area */
+        [data-theme="dark"] main {
+            background-color: #111827 !important;
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix for all section text in dark mode */
+        [data-theme="dark"] section,
+        [data-theme="dark"] .section-title,
+        [data-theme="dark"] .process-step h3,
+        [data-theme="dark"] .process-step p {
+            color: var(--text-dark) !important;
+        }
+
+        [data-theme="dark"] .process-step .text-gray-600,
+        [data-theme="dark"] section .text-gray-600 {
+            color: #9ca3af !important;
+        }
+
+        /* Fix for gradient text in dark mode */
+        [data-theme="dark"] .text-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-mint) 0%, var(--secondary-mint) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Fix backgrounds for dark mode */
         [data-theme="dark"] .bg-white {
             background-color: #1f2937 !important;
         }
@@ -431,14 +526,6 @@
             color: var(--text-dark) !important;
         }
 
-        /* Ensure our custom components work with Breeze */
-        [data-theme="dark"] .stat-card,
-        [data-theme="dark"] .service-card,
-        [data-theme="dark"] .testimonial-card {
-            background-color: #1f2937 !important;
-            color: var(--text-dark) !important;
-        }
-
         /* Fix for buttons and form elements */
         [data-theme="dark"] input,
         [data-theme="dark"] textarea,
@@ -451,12 +538,6 @@
         [data-theme="dark"] input::placeholder,
         [data-theme="dark"] textarea::placeholder {
             color: #9ca3af !important;
-        }
-
-        /* Fix for the main content area */
-        [data-theme="dark"] main {
-            background-color: #111827 !important;
-            color: var(--text-dark) !important;
         }
 
         /* Fix for the user dropdown button */
@@ -869,5 +950,4 @@
     <!-- Add Alpine.js if not already included -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
-
 </html>
