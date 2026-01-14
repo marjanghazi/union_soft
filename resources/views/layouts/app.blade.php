@@ -7,7 +7,12 @@
 
     <title>{{ config('app.name', 'Union Soft') }} - From Vision to Victory</title>
     <meta name="description" content="Union Soft offers expert web development, eCommerce, digital marketing, source codes & online skills training for global clients and local learners.">
-
+    <!-- Favicon / Browser Tab Logo -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
+    <!-- For older browsers -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
+    <!-- For Apple devices -->
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|raleway:400,500,600,700" rel="stylesheet" />
