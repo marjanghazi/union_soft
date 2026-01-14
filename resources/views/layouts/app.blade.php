@@ -659,7 +659,7 @@
                             </x-nav-link>
                             <!-- ADDED PRODUCTS LINK -->
                             <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="px-3 py-2 text-dark-navy">
-                                <i class="fas fa-code mr-2"></i> {{ __('Source Codes') }}
+                                <i class="fas fa-code mr-2"></i> {{ __('Products') }}
                             </x-nav-link>
                             <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="px-3 py-2 text-dark-navy">
                                 <i class="fas fa-envelope mr-2"></i> {{ __('Contact') }}
@@ -761,7 +761,7 @@
                         </x-responsive-nav-link>
                         <!-- ADDED PRODUCTS LINK FOR MOBILE -->
                         <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="block py-3 px-4 rounded-lg text-dark-navy">
-                            <i class="fas fa-code mr-3"></i> {{ __('Source Codes') }}
+                            <i class="fas fa-code mr-3"></i> {{ __('Products') }}
                         </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="block py-3 px-4 rounded-lg text-dark-navy">
                             <i class="fas fa-envelope mr-3"></i> {{ __('Contact') }}
@@ -829,7 +829,7 @@
                             <li><a href="{{ route('home') }}" class="hover:text-primary-mint">Home</a></li>
                             <li><a href="{{ route('about') }}" class="hover:text-primary-mint">About Us</a></li>
                             <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Services</a></li>
-                            <li><a href="{{ route('products.index') }}" class="hover:text-primary-mint">Source Codes</a></li>
+                            <li><a href="{{ route('products.index') }}" class="hover:text-primary-mint">Products</a></li>
                             <li><a href="{{ route('contact') }}" class="hover:text-primary-mint">Contact</a></li>
                         </ul>
                     </div>
@@ -839,7 +839,7 @@
                         <ul class="space-y-2">
                             <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Web Development</a></li>
                             <li><a href="{{ route('services') }}" class="hover:text-primary-mint">E-commerce Solutions</a></li>
-                            <li><a href="{{ route('products.index') }}" class="hover:text-primary-mint">Source Codes</a></li>
+                            <li><a href="{{ route('products.index') }}" class="hover:text-primary-mint">Products</a></li>
                             <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Digital Marketing</a></li>
                             <li><a href="{{ route('services') }}" class="hover:text-primary-mint">Training & Skills</a></li>
                         </ul>
