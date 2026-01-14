@@ -30,6 +30,10 @@
             --white: #FFFFFF;
             --dark-navy: #0D3141;
             --blue-green: #5199AE;
+            --text-light: #374151;
+            /* gray-700 for light mode */
+            --text-dark: #E5E7EB;
+            /* gray-200 for dark mode */
         }
 
         .bg-gradient-primary {
@@ -162,7 +166,6 @@
             font-family: 'Raleway', sans-serif;
             font-weight: 700;
             font-size: 1.8rem;
-            color: var(--dark-navy) !important;
         }
 
         .navbar-brand span {
@@ -203,15 +206,22 @@
             background-color: var(--dark-navy) !important;
         }
 
-        /* Fix for navigation link active state */
+        /* Fix for navigation link active state - FOR LIGHT MODE */
         .nav-link.active,
         .responsive-nav-link.active {
             background-color: var(--primary-mint) !important;
             color: var(--dark-navy) !important;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-weight: 600;
         }
 
-        /* Fix for navigation link hover */
+        /* Navigation links in LIGHT MODE */
+        .nav-link,
+        .responsive-nav-link {
+            color: var(--dark-navy) !important;
+            /* Dark navy color for visibility */
+        }
+
         .nav-link:hover:not(.active),
         .responsive-nav-link:hover:not(.active) {
             color: var(--primary-mint) !important;
@@ -220,7 +230,246 @@
         /* Fix for button styling in nav */
         .btn-primary.nav-link {
             padding: 8px 16px;
-            border-radius: 4px;
+            border-radius: 6px;
+        }
+
+        /* DARK MODE OVERRIDES - Specific text colors */
+        [data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        [data-theme="dark"] .nav-link,
+        [data-theme="dark"] .responsive-nav-link {
+            color: var(--text-dark) !important;
+            /* Light text for dark mode */
+        }
+
+        [data-theme="dark"] .nav-link.active,
+        [data-theme="dark"] .responsive-nav-link.active {
+            background-color: var(--primary-mint) !important;
+            color: var(--dark-navy) !important;
+            /* Dark text on mint background */
+        }
+
+        [data-theme="dark"] .nav-link:hover:not(.active),
+        [data-theme="dark"] .responsive-nav-link:hover:not(.active) {
+            color: var(--primary-mint) !important;
+        }
+
+        [data-theme="dark"] .navbar-brand span.text-dark-navy,
+        [data-theme="dark"] .navbar-brand .text-dark-navy {
+            color: var(--text-dark) !important;
+            /* Light text in dark mode */
+        }
+
+        /* Logo sizing */
+        .logo-img {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Dark mode toggle button */
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid var(--light-gray);
+            color: var(--dark-navy);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--light-gray);
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            color: var(--text-dark) !important;
+            border-color: var(--medium-gray);
+        }
+
+        [data-theme="dark"] .theme-toggle:hover {
+            background: var(--medium-gray);
+        }
+
+        /* Mobile responsive fixes */
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 35px;
+            }
+
+            .nav-container {
+                width: 100%;
+            }
+
+            .mobile-nav-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .desktop-nav {
+                display: none !important;
+            }
+
+            .mobile-menu {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .desktop-nav {
+                display: flex !important;
+            }
+
+            .mobile-menu {
+                display: none !important;
+            }
+        }
+
+        /* Improved mobile navigation */
+        .mobile-nav-content {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 280px;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        [data-theme="dark"] .mobile-nav-content {
+            background: #1f2937 !important;
+            /* Dark background for mobile menu */
+        }
+
+        .mobile-nav-content.open {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            display: none;
+        }
+
+        .mobile-nav-overlay.open {
+            display: block;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .footer .grid {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+            }
+
+            .footer div {
+                text-align: center;
+            }
+
+            .footer .flex {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) and (min-width: 641px) {
+            .footer .grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        /* CRITICAL FIX: Override Breeze's default blue text colors in dark mode */
+        [data-theme="dark"] .text-gray-700,
+        [data-theme="dark"] .text-gray-800,
+        [data-theme="dark"] .text-gray-900,
+        [data-theme="dark"] .text-gray-600,
+        [data-theme="dark"] .text-gray-500 {
+            color: var(--text-dark) !important;
+        }
+
+        [data-theme="dark"] .text-blue-600,
+        [data-theme="dark"] .text-indigo-600,
+        [data-theme="dark"] .text-blue-700,
+        [data-theme="dark"] .text-indigo-700,
+        [data-theme="dark"] .text-blue-800,
+        [data-theme="dark"] .text-indigo-800 {
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix backgrounds */
+        [data-theme="dark"] .bg-white {
+            background-color: #1f2937 !important;
+        }
+
+        [data-theme="dark"] .bg-gray-50 {
+            background-color: #111827 !important;
+        }
+
+        [data-theme="dark"] .border-gray-200 {
+            border-color: #374151 !important;
+        }
+
+        [data-theme="dark"] .bg-gray-100 {
+            background-color: #374151 !important;
+        }
+
+        /* Fix for Breeze dropdowns */
+        [data-theme="dark"] .bg-white .text-gray-700,
+        [data-theme="dark"] .bg-white .text-gray-800 {
+            color: var(--text-dark) !important;
+        }
+
+        /* Ensure our custom components work with Breeze */
+        [data-theme="dark"] .stat-card,
+        [data-theme="dark"] .service-card,
+        [data-theme="dark"] .testimonial-card {
+            background-color: #1f2937 !important;
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix for buttons and form elements */
+        [data-theme="dark"] input,
+        [data-theme="dark"] textarea,
+        [data-theme="dark"] select {
+            background-color: #374151 !important;
+            color: var(--text-dark) !important;
+            border-color: #4b5563 !important;
+        }
+
+        [data-theme="dark"] input::placeholder,
+        [data-theme="dark"] textarea::placeholder {
+            color: #9ca3af !important;
+        }
+
+        /* Fix for the main content area */
+        [data-theme="dark"] main {
+            background-color: #111827 !important;
+            color: var(--text-dark) !important;
+        }
+
+        /* Fix for the user dropdown button */
+        [data-theme="dark"] .inline-flex.items-center.px-3.py-2 {
+            color: var(--text-dark) !important;
+            background-color: #374151 !important;
+        }
+
+        [data-theme="dark"] .inline-flex.items-center.px-3.py-2:hover {
+            color: white !important;
+            background-color: #4b5563 !important;
         }
     </style>
 </head>
@@ -228,158 +477,174 @@
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-50">
         <!-- Navigation -->
-        <nav class="bg-white shadow-sm" x-data="{ open: false }">
+        <nav class="bg-white shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex">
-                        <!-- Logo -->
-                        <div class="flex-shrink-0 flex items-center">
-                            <a href="{{ route('home') }}" class="navbar-brand flex items-center">
-                                <!-- Option 1: Image logo -->
-                                <img src="{{ asset('images/logo.png') }}"
-                                    alt="{{ config('app.name', 'Union Soft') }}"
-                                    class="h-20 w-auto mr-2">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0">
+                        <a href="{{ route('home') }}" class="navbar-brand flex items-center">
+                            <img src="{{ asset('images/logo.png') }}"
+                                alt="{{ config('app.name', 'Union Soft') }}"
+                                class="logo-img">
+                            <span class="hidden lg:inline ml-2 text-xl font-bold text-dark-navy">UnionSoft</span>
+                        </a>
+                    </div>
 
-                            </a>
-                        </div>
-
-                        <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                    <!-- Desktop Navigation -->
+                    <div class="desktop-nav hidden md:flex items-center space-x-6">
+                        <div class="flex items-center space-x-1">
+                            <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="px-3 py-2">
                                 <i class="fas fa-home mr-2"></i> {{ __('Home') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('about')" :active="request()->routeIs('about')">
+                            <x-nav-link :href="route('about')" :active="request()->routeIs('about')" class="px-3 py-2">
                                 <i class="fas fa-info-circle mr-2"></i> {{ __('About') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('services')" :active="request()->routeIs('services')">
+                            <x-nav-link :href="route('services')" :active="request()->routeIs('services')" class="px-3 py-2">
                                 <i class="fas fa-cogs mr-2"></i> {{ __('Services') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')">
+                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="px-3 py-2">
                                 <i class="fas fa-envelope mr-2"></i> {{ __('Contact') }}
                             </x-nav-link>
                         </div>
-                    </div>
 
-                    <!-- Right Side Of Navbar -->
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <!-- Authentication Links -->
-                        @auth
-                        <div class="ml-3 relative" x-data="{ open: false }">
-                            <x-dropdown align="right" width="48">
-                                <x-slot name="trigger">
-                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                        <div>{{ Auth::user()->name }}</div>
-                                        <div class="ml-1">
-                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                    </button>
-                                </x-slot>
+                        <!-- Desktop Actions -->
+                        <div class="flex items-center space-x-4">
+                            <!-- Dark/Light Mode Toggle -->
+                            <button id="theme-toggle" class="theme-toggle">
+                                <i class="fas fa-moon" id="theme-icon"></i>
+                            </button>
 
-                                <x-slot name="content">
-                                    <x-dropdown-link :href="route('profile.edit')">
-                                        {{ __('Profile') }}
-                                    </x-dropdown-link>
+                            @auth
+                            <div class="relative">
+                                <x-dropdown align="right" width="48">
+                                    <x-slot name="trigger">
+                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-dark-navy bg-white hover:text-primary-mint focus:outline-none transition ease-in-out duration-150">
+                                            <div>{{ Auth::user()->name }}</div>
+                                            <div class="ml-1">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </x-slot>
 
-                                    <!-- Authentication -->
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <x-dropdown-link :href="route('logout')"
-                                            onclick="event.preventDefault();
-                                                                this.closest('form').submit();">
-                                            {{ __('Log Out') }}
+                                    <x-slot name="content">
+                                        <x-dropdown-link :href="route('profile.edit')" class="text-dark-navy">
+                                            {{ __('Profile') }}
                                         </x-dropdown-link>
-                                    </form>
-                                </x-slot>
-                            </x-dropdown>
-                        </div>
-                        @else
-                        <div class="space-x-4">
-                            <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                                <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
-                            </x-nav-link>
 
-                            @if (Route::has('register'))
-                            <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="btn-primary">
-                                <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
-                            </x-nav-link>
-                            @endif
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <x-dropdown-link :href="route('logout')"
+                                                onclick="event.preventDefault();
+                                                                this.closest('form').submit();"
+                                                class="text-dark-navy">
+                                                {{ __('Log Out') }}
+                                            </x-dropdown-link>
+                                        </form>
+                                    </x-slot>
+                                </x-dropdown>
+                            </div>
+                            @else
+                            <div class="flex items-center space-x-3">
+                                <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="text-dark-navy hover:text-primary-mint">
+                                    <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
+                                </x-nav-link>
+
+                                @if (Route::has('register'))
+                                <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="btn-primary">
+                                    <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
+                                </x-nav-link>
+                                @endif
+                            </div>
+                            @endauth
                         </div>
-                        @endauth
                     </div>
 
-                    <!-- Hamburger -->
-                    <div class="-mr-2 flex items-center sm:hidden">
-                        <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                    <!-- Mobile Menu Button -->
+                    <div class="mobile-nav-actions flex items-center md:hidden">
+                        <!-- Dark/Light Mode Toggle for Mobile -->
+                        <button id="theme-toggle-mobile" class="theme-toggle mr-2">
+                            <i class="fas fa-moon" id="theme-icon-mobile"></i>
+                        </button>
+
+                        <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-dark-navy hover:text-primary-mint hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
                             <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                <path :class="{'hidden': open, 'inline-flex': !open}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                <path :class="{'hidden': !open, 'inline-flex': open}" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Responsive Navigation Menu -->
-            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="sm:hidden" @click.away="open = false">
-                <div class="pt-2 pb-3 space-y-1">
-                    <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" @click="open = false">
-                        <i class="fas fa-home mr-2"></i> {{ __('Home') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')" @click="open = false">
-                        <i class="fas fa-info-circle mr-2"></i> {{ __('About') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('services')" :active="request()->routeIs('services')" @click="open = false">
-                        <i class="fas fa-cogs mr-2"></i> {{ __('Services') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" @click="open = false">
-                        <i class="fas fa-envelope mr-2"></i> {{ __('Contact') }}
-                    </x-responsive-nav-link>
-                </div>
-
-                <!-- Responsive Settings Options -->
-                <div class="pt-4 pb-1 border-t border-gray-200">
-                    @auth
-                    <div class="px-4">
-                        <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            <!-- Mobile Navigation Menu -->
+            <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+            <div class="mobile-nav-content" id="mobile-nav-content">
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-dark-navy">Menu</h3>
+                        <button id="close-mobile-menu" class="p-2 rounded-md hover:bg-gray-100">
+                            <i class="fas fa-times text-dark-navy"></i>
+                        </button>
                     </div>
 
-                    <div class="mt-3 space-y-1">
-                        <x-responsive-nav-link :href="route('profile.edit')" @click="open = false">
-                            {{ __('Profile') }}
+                    <div class="space-y-2 mb-6">
+                        <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="block py-3 px-4 rounded-lg">
+                            <i class="fas fa-home mr-3"></i> {{ __('Home') }}
                         </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')" class="block py-3 px-4 rounded-lg">
+                            <i class="fas fa-info-circle mr-3"></i> {{ __('About') }}
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('services')" :active="request()->routeIs('services')" class="block py-3 px-4 rounded-lg">
+                            <i class="fas fa-cogs mr-3"></i> {{ __('Services') }}
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="block py-3 px-4 rounded-lg">
+                            <i class="fas fa-envelope mr-3"></i> {{ __('Contact') }}
+                        </x-responsive-nav-link>
+                    </div>
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-responsive-nav-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                                    this.closest('form').submit();" @click="open = false">
-                                {{ __('Log Out') }}
+                    <div class="pt-4 border-t border-gray-200">
+                        @auth
+                        <div class="mb-4 px-4">
+                            <div class="font-medium text-base text-dark-navy">{{ Auth::user()->name }}</div>
+                            <div class="font-medium text-sm text-gray-600">{{ Auth::user()->email }}</div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <x-responsive-nav-link :href="route('profile.edit')" class="block py-3 px-4 rounded-lg">
+                                <i class="fas fa-user mr-3"></i> {{ __('Profile') }}
                             </x-responsive-nav-link>
-                        </form>
-                    </div>
-                    @else
-                    <div class="space-y-1">
-                        <x-responsive-nav-link :href="route('login')" @click="open = false">
-                            <i class="fas fa-sign-in-alt mr-2"></i> {{ __('Login') }}
-                        </x-responsive-nav-link>
 
-                        @if (Route::has('register'))
-                        <x-responsive-nav-link :href="route('register')" @click="open = false">
-                            <i class="fas fa-user-plus mr-2"></i> {{ __('Register') }}
-                        </x-responsive-nav-link>
-                        @endif
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-responsive-nav-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                    this.closest('form').submit();"
+                                    class="block py-3 px-4 rounded-lg">
+                                    <i class="fas fa-sign-out-alt mr-3"></i> {{ __('Log Out') }}
+                                </x-responsive-nav-link>
+                            </form>
+                        </div>
+                        @else
+                        <div class="space-y-2">
+                            <x-responsive-nav-link :href="route('login')" class="block py-3 px-4 rounded-lg">
+                                <i class="fas fa-sign-in-alt mr-3"></i> {{ __('Login') }}
+                            </x-responsive-nav-link>
+
+                            @if (Route::has('register'))
+                            <x-responsive-nav-link :href="route('register')" class="block py-3 px-4 rounded-lg btn-primary">
+                                <i class="fas fa-user-plus mr-3"></i> {{ __('Register') }}
+                            </x-responsive-nav-link>
+                            @endif
+                        </div>
+                        @endauth
                     </div>
-                    @endauth
                 </div>
             </div>
         </nav>
 
         <!-- Page Content -->
-        <main>
+        <main class="bg-gray-50">
             {{ $slot }}
         </main>
 
@@ -454,76 +719,134 @@
     </div>
 
     <script>
-        // Mobile menu functionality with proper event handling
-        document.addEventListener('DOMContentLoaded', function() {
-            // Make sure all navigation links work with single click
+        // Dark/Light Mode Toggle for Breeze
+        function initThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeIconMobile = document.getElementById('theme-icon-mobile');
+            const htmlElement = document.documentElement;
+
+            // Check for saved theme or prefer-color-scheme
+            const savedTheme = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+            // Apply the theme to data-theme attribute (Breeze's method)
+            if (savedTheme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeIconMobile.classList.remove('fa-moon');
+                themeIconMobile.classList.add('fa-sun');
+            } else {
+                htmlElement.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeIconMobile.classList.remove('fa-sun');
+                themeIconMobile.classList.add('fa-moon');
+            }
+
+            // Toggle function
+            function toggleTheme() {
+                if (htmlElement.getAttribute('data-theme') === 'dark') {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    themeIconMobile.classList.remove('fa-sun');
+                    themeIconMobile.classList.add('fa-moon');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    themeIconMobile.classList.remove('fa-moon');
+                    themeIconMobile.classList.add('fa-sun');
+                }
+            }
+
+            // Add event listeners
+            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+            if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('theme')) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    htmlElement.setAttribute('data-theme', newTheme);
+                    if (newTheme === 'dark') {
+                        themeIcon.classList.remove('fa-moon');
+                        themeIcon.classList.add('fa-sun');
+                        themeIconMobile.classList.remove('fa-moon');
+                        themeIconMobile.classList.add('fa-sun');
+                    } else {
+                        themeIcon.classList.remove('fa-sun');
+                        themeIcon.classList.add('fa-moon');
+                        themeIconMobile.classList.remove('fa-sun');
+                        themeIconMobile.classList.add('fa-moon');
+                    }
+                }
+            });
+        }
+
+        // Mobile Menu Toggle
+        function initMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeMobileMenu = document.getElementById('close-mobile-menu');
+            const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+            const mobileNavContent = document.getElementById('mobile-nav-content');
+
+            function openMobileMenu() {
+                mobileNavOverlay.classList.add('open');
+                mobileNavContent.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenuFunc() {
+                mobileNavOverlay.classList.remove('open');
+                mobileNavContent.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', openMobileMenu);
+            }
+
+            if (closeMobileMenu) {
+                closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
+            }
+
+            if (mobileNavOverlay) {
+                mobileNavOverlay.addEventListener('click', closeMobileMenuFunc);
+            }
+
+            // Close menu when clicking on a link
+            const mobileLinks = document.querySelectorAll('#mobile-nav-content a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenuFunc);
+            });
+        }
+
+        // Active link highlighting
+        function initActiveLinks() {
+            const currentPath = window.location.pathname;
             const navLinks = document.querySelectorAll('a.nav-link, a.responsive-nav-link');
 
             navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // Only prevent default behavior for links that have JavaScript handlers
-                    if (this.getAttribute('href') === '#' || this.hasAttribute('@click')) {
-                        e.preventDefault();
-                    }
+                link.classList.remove('active');
 
-                    // Close mobile menu when a link is clicked
-                    const mobileMenu = document.querySelector('[x-data]');
-                    if (mobileMenu && mobileMenu.__x && mobileMenu.__x.$data && mobileMenu.__x.$data.open) {
-                        mobileMenu.__x.$data.open = false;
-                    }
-                });
-            });
-
-            // Counter animation
-            const counters = document.querySelectorAll('.counter');
-            const speed = 200;
-
-            function animateCounter(counter) {
-                const target = +counter.getAttribute('data-target');
-                const count = +counter.innerText;
-                const increment = target / speed;
-
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + increment);
-                    setTimeout(() => animateCounter(counter), 1);
-                } else {
-                    counter.innerText = target;
-                }
-            }
-
-            // Intersection Observer for counters
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const counter = entry.target;
-                        counter.setAttribute('data-target', counter.textContent);
-                        counter.textContent = '0';
-                        animateCounter(counter);
-                        observer.unobserve(counter);
-                    }
-                });
-            }, {
-                threshold: 0.5
-            });
-
-            counters.forEach(counter => {
-                observer.observe(counter);
-            });
-
-            // Fix for active state styling
-            const currentPath = window.location.pathname;
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
+                const href = link.getAttribute('href');
+                if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
                     link.classList.add('active');
                 }
             });
-        });
+        }
 
-        // Prevent double click issues
-        document.addEventListener('dblclick', function(e) {
-            if (e.target.tagName === 'A' && e.target.closest('nav')) {
-                e.preventDefault();
-            }
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initThemeToggle();
+            initMobileMenu();
+            initActiveLinks();
         });
     </script>
 
