@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         } elseif ($user->isDeveloper()) {
             return redirect()->route('developer.dashboard');
         } else {
-            // Default dashboard for regular users
+            // Default dashboard for regular users (using main website layout)
             return view('dashboard');
         }
     })->name('dashboard');
@@ -59,10 +59,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Admin routes - protected by role middleware
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/admin/projects', [ProjectController::class, 'index'])->name('admin.projects');
-        Route::get('/admin/project/{id}', [ProjectController::class, 'show'])->name('admin.project.details');
+    Route::prefix('admin')->middleware(['role:admin'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/projects', [ProjectController::class, 'index'])->name('admin.projects');
+        Route::get('/project/{id}', [ProjectController::class, 'show'])->name('admin.project.details');
         // Add more admin routes here
     });
 
@@ -73,5 +73,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Add more developer routes here
     });
 });
+
+// Logout route (outside middleware for accessibility)
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
 
 require __DIR__ . '/auth.php';
