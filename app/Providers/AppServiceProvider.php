@@ -22,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register the admin layout as a component
         Blade::component('layouts.admin', 'layouts.admin');
+        Blade::component('layouts.developer', 'layouts.developer');
     }
 }

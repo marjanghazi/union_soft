@@ -329,9 +329,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.projects') }}" class="{{ request()->routeIs('admin.projects') ? 'active' : '' }}">
+                        <a href="{{ route('admin.projects') }}" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
                             <i class="fas fa-project-diagram"></i>
-                            <span class="menu-text">Projects</span>
+                            <span class="menu-text">Users</span>
                         </a>
                     </li>
                     <li>
